@@ -6,10 +6,10 @@ class HeroSystem {
         this.currentEnergy = 100;
         this.energyRegenRate = 1; // енергия за секунда
         this.abilities = {
-            1: { name: 'Огнена топка', cost: 30, cooldown: 3000 },
-            2: { name: 'Ледена буря', cost: 25, cooldown: 2500 },
-            3: { name: 'Светкавична стрела', cost: 40, cooldown: 4000 },
-            4: { name: 'Лечение', cost: 20, cooldown: 2000 }
+            1: { name: 'Огнена топка', cost: 30, cooldown: 3000, icon: '🔥', color: '#ff3333' },
+            2: { name: 'Ледена буря', cost: 25, cooldown: 2500, icon: '❄️', color: '#3399ff' },
+            3: { name: 'Светкавична стрела', cost: 40, cooldown: 4000, icon: '⚡', color: '#ffff33' },
+            4: { name: 'Лечение', cost: 20, cooldown: 2000, icon: '💚', color: '#33ff66' }
         };
         this.abilityCooldowns = {
             1: 0,
@@ -62,6 +62,9 @@ class HeroSystem {
         // Специални ефекти за всяка способност
         this.triggerAbilityEffect(abilityId);
 
+        // Визуален ефект - промяна на цветовете
+        this.triggerColorEffect(abilityId);
+
         // Обновяване на дисплея
         this.updateDisplay();
         this.startCooldown(abilityId);
@@ -75,6 +78,54 @@ class HeroSystem {
             4: () => this.addLog('💚 Възстановени 30 HP!')
         };
         effects[abilityId]();
+    }
+
+    triggerColorEffect(abilityId) {
+        const container = document.querySelector('.container');
+        const abilities = {
+            1: { color: 'fire', duration: 800 },      // Огнена топка - червено
+            2: { color: 'ice', duration: 800 },        // Ледена буря - синьо
+            3: { color: 'lightning', duration: 800 },  // Светкавица - жълто
+            4: { color: 'heal', duration: 800 }        // Лечение - зелено
+        };
+
+        const effect = abilities[abilityId];
+        
+        // Добавяне на клас за ефект
+        container.classList.add(`effect-${effect.color}`);
+
+        // Отстраняване на класа след времето
+        setTimeout(() => {
+            container.classList.remove(`effect-${effect.color}`);
+        }, effect.duration);
+
+        // Показване на notification
+        this.showAbilityNotification(abilityId);
+    }
+
+    showAbilityNotification(abilityId) {
+        const ability = this.abilities[abilityId];
+        const notification = document.getElementById('abilityNotification');
+        const icon = document.getElementById('notificationIcon');
+        const name = document.getElementById('notificationName');
+        const message = document.getElementById('notificationMessage');
+
+        icon.textContent = ability.icon;
+        name.textContent = ability.name;
+        message.textContent = `(-${ability.cost} енергия)`;
+
+        // Изтриване на old класа
+        notification.style.animation = 'none';
+        
+        // Пускане на анимацията
+        setTimeout(() => {
+            notification.style.animation = 'notificationPop 0.6s ease-out forwards';
+        }, 10);
+
+        // Скриване след 2 секунди
+        setTimeout(() => {
+            notification.style.animation = 'notificationOut 0.6s ease-out forwards';
+        }, 1500);
     }
 
     startCooldown(abilityId) {

@@ -37,7 +37,7 @@
             <div class="ability-card">
                 <div class="ability-icon">❄️</div>
                 <h3 class="ability-name">Ледена буря</h3>
-                <p class="ability-description">Замразява врагове с мощна буря</p>
+                <p class="ability-description">Замразява врагове със силна буря</p>
                 <div class="ability-cost">Цена: <span class="cost">25</span> енергия</div>
                 <button class="ability-button" id="ability2" data-ability="2">Активирай</button>
                 <div class="cooldown" id="cooldown2"></div>
@@ -72,6 +72,17 @@
         </div>
 
         <button class="reset-button" id="resetButton">Рестартирай система</button>
+
+        <!-- Notification за активирана способност -->
+        <div class="ability-notification" id="abilityNotification">
+            <div class="notification-content">
+                <div class="notification-icon" id="notificationIcon">🔥</div>
+                <div class="notification-text">
+                    <h4 id="notificationName">Огнена топка</h4>
+                    <p id="notificationMessage">Способността е активирана!</p>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

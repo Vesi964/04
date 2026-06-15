@@ -19,6 +19,24 @@ body {
     border-radius: 15px;
     padding: 30px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+/* Ефекти при активирането на способностите */
+.container.effect-fire {
+    animation: fireFlash 0.8s ease;
+}
+
+.container.effect-ice {
+    animation: iceFlash 0.8s ease;
+}
+
+.container.effect-lightning {
+    animation: lightningFlash 0.8s ease;
+}
+
+.container.effect-heal {
+    animation: healFlash 0.8s ease;
 }
 
 .header {
@@ -41,6 +59,67 @@ body {
     }
     to {
         text-shadow: 0 0 30px #00ff88, 0 0 60px rgba(0, 255, 136, 0.8);
+    }
+}
+
+/* Цветни ефекти при активирането на способностите */
+@keyframes fireFlash {
+    0% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(255, 0, 0, 0.6);
+        background: rgba(255, 50, 0, 0.2);
+    }
+    100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes iceFlash {
+    0% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(0, 150, 255, 0.6);
+        background: rgba(0, 150, 255, 0.15);
+    }
+    100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes lightningFlash {
+    0% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(255, 255, 0, 0.7);
+        background: rgba(255, 255, 0, 0.15);
+    }
+    100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes healFlash {
+    0% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(0, 255, 100, 0.6);
+        background: rgba(0, 255, 100, 0.15);
+    }
+    100% {
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.4);
     }
 }
 
@@ -299,4 +378,80 @@ body {
     .container {
         padding: 20px;
     }
+}
+
+/* Notification за активирана способност */
+.ability-notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #ff006e 0%, #ffbe0b 100%);
+    border: 3px solid #ffffff;
+    border-radius: 15px;
+    padding: 30px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(255, 0, 110, 0.6);
+    animation: notificationPop 0.6s ease-out forwards;
+    pointer-events: none;
+}
+
+@keyframes notificationPop {
+    0% {
+        transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+        opacity: 0;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1) rotate(5deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+
+@keyframes notificationOut {
+    0% {
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.5) translateY(50px);
+        opacity: 0;
+    }
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.notification-icon {
+    font-size: 4em;
+    animation: spin 0.8s ease-out;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg) scale(0);
+    }
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+.notification-text h4 {
+    font-size: 1.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.notification-text p {
+    font-size: 0.9em;
+    color: #ffffff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
