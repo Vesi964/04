@@ -135,6 +135,48 @@
             </div>
         </div>
 
+        <!-- Условия в системата -->
+        <div class="conditions-info">
+            <h4>🔀 УСЛОВИЯ (IF/ELSE)</h4>
+            <div class="conditions-list">
+                <div class="condition-item">
+                    <h5>useAbility() - 4 условия</h5>
+                    <p>✓ if (cooldown > now) → Проверка на режим на очакване</p>
+                    <p>✓ if (energy < cost) → Недостатъчна енергия</p>
+                    <p>✓ if (energy === 0) → Енергията е точно нула</p>
+                    <p>✓ if (energy ≤ 0) → Енергията стана нула</p>
+                </div>
+                <div class="condition-item">
+                    <h5>regenEnergy() - 2 условия</h5>
+                    <p>✓ if (energy < max) → Енергията може да се регенерира</p>
+                    <p>✓ if (energy === max) → Енергията е достигнала максимум</p>
+                </div>
+                <div class="condition-item">
+                    <h5>updateDisplay() - 4 условия</h5>
+                    <p>✓ if (energy === 0) → Добавя класа energy-zero (червено)</p>
+                    <p>✓ if (energy < max*0.25) → Добавя класа energy-low (оранжево)</p>
+                    <p>✓ if (energy < max*0.75) → Добавя класа energy-medium (жълто)</p>
+                    <p>✓ if (energy === max) → Добавя класа energy-full (зелено)</p>
+                </div>
+                <div class="condition-item">
+                    <h5>checkAbilityConditions() - 5 условия</h5>
+                    <p>✓ if (cooldown > now) → В режим на очакване</p>
+                    <p>✓ if (energy >= cost) → Има достатъчна енергия</p>
+                    <p>✓ if (energy > 0) → Енергията не е нула</p>
+                    <p>✓ if (!cooldown && energy && !zero) → Способността може да се използва</p>
+                    <p>✓ if (energy >= cost*1.5) → Има енергия за критичен удар</p>
+                </div>
+                <div class="condition-item">
+                    <h5>getEnergyStatus() - 5 условия</h5>
+                    <p>✓ if (energy === max) → Енергията е пълна</p>
+                    <p>✓ if (energy === 0) → Енергията е празна</p>
+                    <p>✓ if (energy < max*0.2) → Критично ниска енергия</p>
+                    <p>✓ if (!full && !empty && !critical) → Нормална енергия</p>
+                    <p>✓ if (energy < max) → Може да се регенерира</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Notification за активирана способност -->
         <div class="ability-notification" id="abilityNotification">
             <div class="notification-content">

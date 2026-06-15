@@ -204,22 +204,36 @@ class HeroSystem {
         const ability = this.abilities[abilityId];
         const now = Date.now();
 
-        // Проверка на cooldown
+        // ===== УСЛОВИЯ =====
+        
+        // УСЛОВИЕ 1: Проверка на cooldown
         if (this.abilityCooldowns[abilityId] > now) {
             const remainingTime = Math.ceil((this.abilityCooldowns[abilityId] - now) / 1000);
             this.addLog(formatLogMessage('cooldown', ability.name, remainingTime), 'error');
-            return;
+            return;  // Прекратяване на функцията ако е в cooldown
         }
 
-        // Проверка на енергия
+        // УСЛОВИЕ 2: Проверка за недостатъчна енергия
         if (this.currentEnergy < ability.cost) {
             this.addLog(formatLogMessage('lowenergy', ability.name, ability.cost), 'error');
+            return;  // Прекратяване на функцията ако няма енергия
+        }
+
+        // УСЛОВИЕ 3: Проверка дали енергията е точно 0
+        if (this.currentEnergy === 0) {
+            this.addLog('⚠️ Няма енергия! Способностите са невозможни!', 'error');
             return;
         }
 
         // Използване на способността
         this.currentEnergy -= ability.cost;
         this.abilityCooldowns[abilityId] = now + ability.cooldown;
+
+        // УСЛОВИЕ 4: Проверка дали енергията стана 0 след активирането
+        if (this.currentEnergy <= 0) {
+            this.currentEnergy = 0;
+            this.addLog('⚠️ Енергията достигна 0! Почакайте регенерирането...', 'error');
+        }
 
         this.addLog(formatLogMessage('activate', ability.name, ability.cost), 'success');
 
@@ -330,16 +344,48 @@ class HeroSystem {
     }
 
     regenEnergy() {
+        // УСЛОВИЕ 1: Проверка дали енергията е по-малка от максимума
         if (this.currentEnergy < this.maxEnergy) {
             this.currentEnergy = Math.min(
                 this.currentEnergy + this.energyRegenRate,
                 this.maxEnergy
             );
+            
+            // УСЛОВИЕ 2: Проверка дали енергията достигна максимума
+            if (this.currentEnergy === this.maxEnergy) {
+                this.addLog('✨ Енергията е пълна!', 'success');
+            }
+            
             this.updateDisplay();
         }
     }
 
     updateDisplay() {
+
+        // ===== УСЛОВИЯ ЗА ВИЗУАЛНИ ИНДИКАТОРИ =====
+        
+        const energyDisplay = document.querySelector('.energy-display');
+        
+        // УСЛОВИЕ 1: Ако енергията е 0
+        if (this.currentEnergy === 0) {
+            energyDisplay.classList.add('energy-zero');
+            energyDisplay.classList.remove('energy-low', 'energy-medium', 'energy-full');
+        }
+        // УСЛОВИЕ 2: Ако енергията е ниска (под 25%)
+        else if (this.currentEnergy < this.maxEnergy * 0.25) {
+            energyDisplay.classList.add('energy-low');
+            energyDisplay.classList.remove('energy-zero', 'energy-medium', 'energy-full');
+        }
+        // УСЛОВИЕ 3: Ако енергията е средна (25-75%)
+        else if (this.currentEnergy < this.maxEnergy * 0.75) {
+            energyDisplay.classList.add('energy-medium');
+            energyDisplay.classList.remove('energy-zero', 'energy-low', 'energy-full');
+        }
+        // УСЛОВИЕ 4: Ако енергията е пълна (100%)
+        else if (this.currentEnergy === this.maxEnergy) {
+            energyDisplay.classList.add('energy-full');
+            energyDisplay.classList.remove('energy-zero', 'energy-low', 'energy-medium');
+        }
         // Обновяване на енергийния барелад
         const energyPercent = (this.currentEnergy / this.maxEnergy) * 100;
         document.getElementById('energyFill').style.width = energyPercent + '%';
@@ -350,7 +396,62 @@ class HeroSystem {
     }
 
     addLog(message, type = 'normal') {
-        const logContent = document.getElementById('logContent');
+     
+
+    /**
+     * Условие за проверка на能力 статус с множество условия
+     * @param {number} abilityId - ID на способност
+     * @returns {object} Обект с информация за статуса
+     */
+    checkAbilityConditions(abilityId) {
+        const ability = this.abilities[abilityId];
+        const now = Date.now();
+        const status = {};
+
+        // УСЛОВИЕ 1: Проверка на cooldown
+        status.inCooldown = this.abilityCooldowns[abilityId] > now;
+        
+        // УСЛОВИЕ 2: Проверка за достатъчна енергия
+        status.hasEnergy = this.currentEnergy >= ability.cost;
+        
+        // УСЛОВИЕ 3: Проверка дали енергията не е 0
+        status.energyNotZero = this.currentEnergy > 0;
+        
+        // УСЛОВИЕ 4: Комбинирано условие - способността може да бъде използвана
+        status.canUse = !status.inCooldown && status.hasEnergy && status.energyNotZero;
+        
+        // УСЛОВИЕ 5: Проверка дали енергията е достатъчна за критичен удар
+        status.hasCriticalEnergy = this.currentEnergy >= ability.cost * 1.5;
+        
+        return status;
+    }
+
+    /**
+     * Метод за получаване на информация за енергийния статус
+     * @returns {object} Обект с енергийната информация
+     */
+    getEnergyStatus() {
+        const status = {};
+
+        // УСЛОВИЕ 1: Енергията е пълна
+        status.isFull = this.currentEnergy === this.maxEnergy;
+
+        // УСЛОВИЕ 2: Енергията е празна
+        status.isEmpty = this.currentEnergy === 0;
+
+        // УСЛОВИЕ 3: Енергията е критично ниска
+        status.isCritical = this.currentEnergy < this.maxEnergy * 0.2;
+
+        // УСЛОВИЕ 4: Енергията е нормална
+        status.isNormal = !status.isFull && !status.isEmpty && !status.isCritical;
+
+        // УСЛОВИЕ 5: Има енергия за регенериране
+        status.canRegenerate = this.currentEnergy < this.maxEnergy;
+
+        status.percentage = getEnergyPercentage(this.currentEnergy, this.maxEnergy, 0);
+
+        return status;
+    }   const logContent = document.getElementById('logContent');
         const p = document.createElement('p');
         p.textContent = message;
         if (type) p.className = type;
@@ -382,67 +483,73 @@ class HeroSystem {
 document.addEventListener('DOMContentLoaded', () => {
     const heroSystem = new HeroSystem();
 
-    // ===== ДЕМОНСТРАЦИЯ НА ФУНКЦИИТЕ С ПАРАМЕТРИ =====
-    console.log('%c⚡ HERO SYSTEM - Функции с параметри', 'color: #00ff88; font-size: 16px; font-weight: bold;');
+    // ===== ДЕМОНСТРАЦИЯ НА УСЛОВИЯТА =====
+    console.log('%c⚡ HERO SYSTEM - Условия', 'color: #00ff88; font-size: 16px; font-weight: bold;');
     
-    // Демонстрация на power() функция
-    console.log('%c1. power(name, cost, color, icon)', 'color: #ffbe0b; font-weight: bold;');
-    const firePower = power('Огнена топка', 30, 'fire', '🔥');
-    const icePower = power('Ледена буря', 25, 'ice', '❄️');
-    console.log('Огнена топка:', firePower);
-    console.log('  - Урон: ' + firePower.damage + ', Ефективност: ' + firePower.efficiency);
-    
-    // Демонстрация на calculateDamage() функция
-    console.log('%c2. calculateDamage(baseDamage, energyUsed, multiplier)', 'color: #ffbe0b; font-weight: bold;');
-    const damage1 = calculateDamage(45, 30);
-    const damage2 = calculateDamage(45, 30, 1.3);
-    const damage3 = calculateDamage(45, 40, 1.5);
-    console.log('Базов урон: ' + damage1 + ' (45 + 30*0.5)');
-    console.log('Със 30% множител: ' + damage2 + ' (със бонус)');
-    console.log('Със 50% множител: ' + damage3 + ' (мощен удар)');
-    
-    // Демонстрация на animateEffect() функция
-    console.log('%c3. animateEffect(effectType, duration, intensity)', 'color: #ffbe0b; font-weight: bold;');
-    const fireEffect = animateEffect('fire', 800, 0.8);
-    const iceEffect = animateEffect('ice', 800, 1.0);
-    console.log('Огнен ефект:', fireEffect);
-    console.log('Ледов ефект:', iceEffect);
-    
-    // Демонстрация на formatLogMessage() функция
-    console.log('%c4. formatLogMessage(action, abilityName, value)', 'color: #ffbe0b; font-weight: bold;');
-    const msg1 = formatLogMessage('activate', 'Огнена топка', 30);
-    const msg2 = formatLogMessage('damage', 'Светкавична стрела', 73);
-    const msg3 = formatLogMessage('heal', 'Лечение', 45);
-    console.log(msg1);
-    console.log(msg2);
-    console.log(msg3);
+    console.log('%c=== УСЛОВИЯ ВЪВ useAbility() ===', 'color: #ffbe0b; font-weight: bold;');
+    console.log('✓ УСЛОВИЕ 1: Проверка на cooldown - if (cooldownRemaining > 0)');
+    console.log('✓ УСЛОВИЕ 2: Проверка за недостатъчна енергия - if (currentEnergy < cost)');
+    console.log('✓ УСЛОВИЕ 3: Проверка дали енергията е точно 0 - if (currentEnergy === 0)');
+    console.log('✓ УСЛОВИЕ 4: Проверка дали енергията стана 0 - if (currentEnergy <= 0)');
 
-    // Демонстрация на checkAbilityStatus() функция
-    console.log('%c5. checkAbilityStatus(currentEnergy, maxEnergy, cost, cooldownRemaining)', 'color: #ffbe0b; font-weight: bold;');
-    const status1 = checkAbilityStatus(100, 100, 30, 0);
-    const status2 = checkAbilityStatus(20, 100, 30, 0);
-    const status3 = checkAbilityStatus(100, 100, 30, 2500);
-    console.log('Статус (достатъчна енергия): ' + status1);
-    console.log('Статус (недостатъчна енергия): ' + status2);
-    console.log('Статус (в режим на очакване): ' + status3);
+    console.log('%c=== УСЛОВИЯ В regenEnergy() ===', 'color: #ffbe0b; font-weight: bold;');
+    console.log('✓ УСЛОВИЕ 1: Проверка дали енергията < max - if (currentEnergy < maxEnergy)');
+    console.log('✓ УСЛОВИЕ 2: Проверка дали енергията достигна max - if (currentEnergy === maxEnergy)');
 
-    // Демонстрация на getEnergyPercentage() функция
-    console.log('%c6. getEnergyPercentage(current, max, decimals)', 'color: #ffbe0b; font-weight: bold;');
-    const percent1 = getEnergyPercentage(100, 100);
-    const percent2 = getEnergyPercentage(50, 100);
-    const percent3 = getEnergyPercentage(75, 100, 0);
-    console.log('Енергия 100/100: ' + percent1 + '%');
-    console.log('Енергия 50/100: ' + percent2 + '%');
-    console.log('Енергия 75/100: ' + percent3 + '%');
+    console.log('%c=== УСЛОВИЯ В updateDisplay() ===', 'color: #ffbe0b; font-weight: bold;');
+    console.log('✓ УСЛОВИЕ 1: Енергията е 0 - if (energy === 0) → energy-zero клас');
+    console.log('✓ УСЛОВИЕ 2: Енергията е ниска (<25%) - if (energy < max*0.25) → energy-low клас');
+    console.log('✓ УСЛОВИЕ 3: Енергията е средна (25-75%) - if (energy < max*0.75) → energy-medium клас');
+    console.log('✓ УСЛОВИЕ 4: Енергията е пълна (100%) - if (energy === max) → energy-full клас');
 
-    // Демонстрация на createAbility() функция
-    console.log('%c7. createAbility(id, name, cost, icon, effect, cooldown, multiplier)', 'color: #ffbe0b; font-weight: bold;');
-    const newAbility1 = createAbility('1', 'Огнена топка', 30, '🔥', 'fire', 3000, 1);
-    const newAbility2 = createAbility('3', 'Светкавична стрела', 40, '⚡', 'lightning', 4000, 1.3);
-    const newAbility3 = createAbility('custom', 'Мегаудар', 50, '💥', 'fire', 5000, 2);
-    console.log('Огнена топка:', newAbility1);
-    console.log('Светкавична стрела:', newAbility2);
-    console.log('Мегаудар (custom):', newAbility3);
+    console.log('%c=== МЕТОДИ С УСЛОВИЯ ===', 'color: #ffbe0b; font-weight: bold;');
     
-    console.log('%c✅ Всички функции с параметри работят правилно!', 'color: #00ff88; font-weight: bold; font-size: 14px;');
+    // Демонстрация на checkAbilityConditions()
+    console.log('%c1. checkAbilityConditions(abilityId) - Множество условия за способност:', 'color: #ff006e; font-weight: bold;');
+    const abilityStatus = heroSystem.checkAbilityConditions(1);
+    console.log('Статус на Огнена топка:', abilityStatus);
+    console.log('  - В cooldown:', abilityStatus.inCooldown, '(if cooldown > now)');
+    console.log('  - Има енергия:', abilityStatus.hasEnergy, '(if energy >= cost)');
+    console.log('  - Енергията не е 0:', abilityStatus.energyNotZero, '(if energy > 0)');
+    console.log('  - Може да се използва:', abilityStatus.canUse, '(!cooldown && energy && notZero)');
+    console.log('  - Има критична енергия:', abilityStatus.hasCriticalEnergy, '(if energy >= cost*1.5)');
+
+    // Демонстрация на getEnergyStatus()
+    console.log('%c2. getEnergyStatus() - Статус на енергия:', 'color: #ff006e; font-weight: bold;');
+    const energyStatus = heroSystem.getEnergyStatus();
+    console.log('Енергийни условия:', energyStatus);
+    console.log('  - Е пълна:', energyStatus.isFull, '(if energy === max)');
+    console.log('  - Е празна:', energyStatus.isEmpty, '(if energy === 0)');
+    console.log('  - Е критична:', energyStatus.isCritical, '(if energy < max*0.2)');
+    console.log('  - Е нормална:', energyStatus.isNormal, '(!full && !empty && !critical)');
+    console.log('  - Може да регенерира:', energyStatus.canRegenerate, '(if energy < max)');
+    console.log('  - Процент: ' + energyStatus.percentage + '%');
+
+    console.log('%c=== ТЕСТВАНЕ НА УСЛОВИЯ ===', 'color: #ffbe0b; font-weight: bold;');
+    
+    // Сценарий 1: Достатъчна енергия
+    console.log('%cСценарий 1: Нормална енергия (70/100)', 'color: #00ff88;');
+    heroSystem.currentEnergy = 70;
+    const status1 = heroSystem.checkAbilityConditions(1);
+    console.log('Резултат: Может ли да активира способност?', status1.canUse ? '✅ ДА' : '❌ НЕ');
+
+    // Сценарий 2: Недостатъчна енергия
+    console.log('%cСценарий 2: Ниска енергия (15/100)', 'color: #ffbe0b;');
+    heroSystem.currentEnergy = 15;
+    const status2 = heroSystem.checkAbilityConditions(1);
+    console.log('Резултат: Может ли да активира Огнена топка (цена 30)?', status2.canUse ? '✅ ДА' : '❌ НЕ');
+    console.log('Причина: Недостатъчна енергия (15 < 30)');
+
+    // Сценарий 3: Енергията е 0
+    console.log('%cСценарий 3: Енергията е 0 (0/100)', 'color: #ff0000;');
+    heroSystem.currentEnergy = 0;
+    const status3 = heroSystem.checkAbilityConditions(1);
+    console.log('Резултат: Може ли някоя способност да се използва?', status3.canUse ? '✅ ДА' : '❌ НЕ');
+    console.log('Причина: энергия = 0');
+
+    // Върнете енергията на нормална стойност
+    heroSystem.currentEnergy = 100;
+    heroSystem.updateDisplay();
+
+    console.log('%c✅ Всички условия работят правилно!', 'color: #00ff88; font-weight: bold; font-size: 14px;');
 });

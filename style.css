@@ -130,6 +130,57 @@ body {
     padding: 20px;
     margin-bottom: 40px;
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* УСЛОВИЯ: Различни стилове за енергийния дисплей */
+
+/* УСЛОВИЕ 1: Енергията е 0 */
+.energy-display.energy-zero {
+    border-color: #ff0000;
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+    background: linear-gradient(135deg, #3d0f0f 0%, #2b0000 100%);
+    animation: pulse-red 0.8s ease-in-out infinite;
+}
+
+@keyframes pulse-red {
+    0%, 100% {
+        box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(255, 0, 0, 0.9);
+    }
+}
+
+/* УСЛОВИЕ 2: Енергията е ниска (под 25%) */
+.energy-display.energy-low {
+    border-color: #ff6b6b;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+    background: linear-gradient(135deg, #3d1f1f 0%, #2b0f0f 100%);
+}
+
+/* УСЛОВИЕ 3: Енергията е средна (25-75%) */
+.energy-display.energy-medium {
+    border-color: #ffbe0b;
+    box-shadow: 0 0 20px rgba(255, 190, 11, 0.3);
+    background: linear-gradient(135deg, #3d3320 0%, #2b1f00 100%);
+}
+
+/* УСЛОВИЕ 4: Енергията е пълна (100%) */
+.energy-display.energy-full {
+    border-color: #00ff88;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+    background: linear-gradient(135deg, #0f3d2b 0%, #0f2b1a 100%);
+    animation: glow-green 1s ease-in-out infinite;
+}
+
+@keyframes glow-green {
+    0%, 100% {
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 50px rgba(0, 255, 136, 0.9);
+    }
 }
 
 .energy-label {
@@ -354,6 +405,7 @@ body {
     border-radius: 10px;
     padding: 20px;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .functions-info h4 {
@@ -411,6 +463,60 @@ body {
     font-style: italic;
     border-left: 2px solid #ffbe0b;
     padding-left: 10px;
+}
+
+/* Условия в системата */
+.conditions-info {
+    background: linear-gradient(135deg, #3d0f1f 0%, #2b0000 100%);
+    border: 2px solid #ff006e;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.conditions-info h4 {
+    color: #ff006e;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 1.2em;
+}
+
+.conditions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.condition-item {
+    background: rgba(255, 0, 110, 0.1);
+    border: 1px solid #ff006e;
+    border-radius: 5px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.condition-item:hover {
+    background: rgba(255, 0, 110, 0.15);
+    box-shadow: 0 4px 15px rgba(255, 0, 110, 0.2);
+}
+
+.condition-item h5 {
+    color: #ff3366;
+    margin-bottom: 10px;
+    font-size: 1em;
+    border-bottom: 2px solid #ff006e;
+    padding-bottom: 8px;
+}
+
+.condition-item p {
+    color: #ffb3d9;
+    font-size: 0.9em;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    padding-left: 10px;
+    border-left: 2px solid #ff006e;
 }
 
 /* Scrollbar styling */
