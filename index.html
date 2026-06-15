@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERO SYSTEM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="title">⚔️ HERO SYSTEM ⚔️</h1>
+        </header>
+
+        <div class="energy-display">
+            <div class="energy-label">ENERGY</div>
+            <div class="energy-bar">
+                <div class="energy-fill" id="energyFill"></div>
+            </div>
+            <div class="energy-text">
+                <span id="energyValue">100</span> / <span id="maxEnergy">100</span>
+            </div>
+        </div>
+
+        <div class="abilities-grid">
+            <!-- Ability 1: Fireball -->
+            <div class="ability-card">
+                <div class="ability-icon">🔥</div>
+                <h3 class="ability-name">Огнена топка</h3>
+                <p class="ability-description">Изстрелва мощна огнена топка</p>
+                <div class="ability-cost">Цена: <span class="cost">30</span> енергия</div>
+                <button class="ability-button" id="ability1" data-ability="1">Активирай</button>
+                <div class="cooldown" id="cooldown1"></div>
+            </div>
+
+            <!-- Ability 2: Ice Storm -->
+            <div class="ability-card">
+                <div class="ability-icon">❄️</div>
+                <h3 class="ability-name">Ледена буря</h3>
+                <p class="ability-description">Замразява врагове с мощна буря</p>
+                <div class="ability-cost">Цена: <span class="cost">25</span> енергия</div>
+                <button class="ability-button" id="ability2" data-ability="2">Активирай</button>
+                <div class="cooldown" id="cooldown2"></div>
+            </div>
+
+            <!-- Ability 3: Lightning Strike -->
+            <div class="ability-card">
+                <div class="ability-icon">⚡</div>
+                <h3 class="ability-name">Светкавична стрела</h3>
+                <p class="ability-description">Мълния поражда врага с огромна сила</p>
+                <div class="ability-cost">Цена: <span class="cost">40</span> енергия</div>
+                <button class="ability-button" id="ability3" data-ability="3">Активирай</button>
+                <div class="cooldown" id="cooldown3"></div>
+            </div>
+
+            <!-- Ability 4: Heal -->
+            <div class="ability-card">
+                <div class="ability-icon">💚</div>
+                <h3 class="ability-name">Лечение</h3>
+                <p class="ability-description">Възстановява здравето на героя</p>
+                <div class="ability-cost">Цена: <span class="cost">20</span> енергия</div>
+                <button class="ability-button" id="ability4" data-ability="4">Активирай</button>
+                <div class="cooldown" id="cooldown4"></div>
+            </div>
+        </div>
+
+        <div class="status-log">
+            <h4>Лог на действията</h4>
+            <div class="log-content" id="logContent">
+                <p>Готов за бой...</p>
+            </div>
+        </div>
+
+        <button class="reset-button" id="resetButton">Рестартирай система</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
