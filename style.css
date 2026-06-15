@@ -347,6 +347,72 @@ body {
     transform: scale(1.02);
 }
 
+/* Демонстрация на функциите */
+.functions-info {
+    background: linear-gradient(135deg, #0f3460 0%, #16213e 100%);
+    border: 2px solid #8338ec;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.functions-info h4 {
+    color: #8338ec;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.function-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.function-item {
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 4px solid #8338ec;
+    padding: 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.function-item:hover {
+    background: rgba(131, 56, 236, 0.15);
+    box-shadow: 0 4px 15px rgba(131, 56, 236, 0.2);
+}
+
+.function-item code {
+    display: block;
+    background: #1a1a1a;
+    color: #00ff88;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 0.85em;
+    overflow-x: auto;
+    border: 1px solid #00ff88;
+}
+
+.function-item p {
+    color: #ccc;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.function-item .example {
+    display: block;
+    background: rgba(255, 190, 11, 0.1);
+    color: #ffbe0b;
+    padding: 8px;
+    border-radius: 3px;
+    font-size: 0.85em;
+    font-style: italic;
+    border-left: 2px solid #ffbe0b;
+    padding-left: 10px;
+}
+
 /* Scrollbar styling */
 .log-content::-webkit-scrollbar {
     width: 6px;
