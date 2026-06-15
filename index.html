@@ -75,27 +75,62 @@
 
         <!-- Демонстрация на функциите -->
         <div class="functions-info">
-            <h4>📊 Функции с параметри</h4>
+            <h4>📊 Функции с параметри - Всички функции получават информация чрез параметри</h4>
             <div class="function-list">
                 <div class="function-item">
                     <code>power(name, cost, color, icon)</code>
-                    <p>Определя способност с параметри: име, цена на енергия, цвят на ефект и икона</p>
+                    <p>Дефинира способност със параметри: име, цена, цвят и икона</p>
                     <span class="example">Пример: power("Огнена топка", 30, "fire", "🔥")</span>
                 </div>
                 <div class="function-item">
                     <code>calculateDamage(baseDamage, energyUsed, multiplier)</code>
-                    <p>Изчислява урон на базата на енергията и множител</p>
-                    <span class="example">Пример: calculateDamage(45, 30, 1.3) = 73</span>
+                    <p>Изчислява урон - параметри: базов урон, енергия, множител</p>
+                    <span class="example">Пример: calculateDamage(45, 30, 1.3) → 73</span>
                 </div>
                 <div class="function-item">
                     <code>animateEffect(effectType, duration, intensity)</code>
-                    <p>Управлява визуални ефекти с тип, продължителност и интензивност</p>
+                    <p>Управлява ефекти - параметри: тип, време, интензивност</p>
                     <span class="example">Пример: animateEffect("fire", 800, 0.8)</span>
                 </div>
                 <div class="function-item">
                     <code>formatLogMessage(action, abilityName, value)</code>
-                    <p>Форматира текстови съобщения за логовете</p>
+                    <p>Форматира съобщения - параметри: действие, име, стойност</p>
                     <span class="example">Пример: formatLogMessage("damage", "Огнена топка", 45)</span>
+                </div>
+                <div class="function-item">
+                    <code>checkAbilityStatus(current, max, cost, cooldown)</code>
+                    <p>Проверява статус - параметри: енергия, макс, цена, cooldown</p>
+                    <span class="example">Пример: checkAbilityStatus(100, 100, 30, 0) → "available"</span>
+                </div>
+                <div class="function-item">
+                    <code>getEnergyPercentage(current, max, decimals)</code>
+                    <p>Калкулира процент - параметри: текуща, макс, десетични</p>
+                    <span class="example">Пример: getEnergyPercentage(50, 100, 2) → 50.00%</span>
+                </div>
+                <div class="function-item">
+                    <code>createAbility(id, name, cost, icon, effect, cooldown, multiplier)</code>
+                    <p>Генерира способност - всички параметри задават способността</p>
+                    <span class="example">Пример: createAbility("1", "Огнена топка", 30, "🔥", "fire", 3000, 1)</span>
+                </div>
+                <div class="function-item">
+                    <code>triggerAbilityEffect(ability, abilityId)</code>
+                    <p>Метод - параметри: обект на способност, ID</p>
+                    <span class="example">Пример: this.triggerAbilityEffect(ability, 1)</span>
+                </div>
+                <div class="function-item">
+                    <code>triggerColorEffect(ability, abilityId)</code>
+                    <p>Метод - параметри: обект на способност, ID</p>
+                    <span class="example">Пример: this.triggerColorEffect(ability, 2)</span>
+                </div>
+                <div class="function-item">
+                    <code>showAbilityNotification(icon, name, cost)</code>
+                    <p>Метод - параметри: икона, име, цена на способност</p>
+                    <span class="example">Пример: this.showAbilityNotification("🔥", "Огнена топка", 30)</span>
+                </div>
+                <div class="function-item">
+                    <code>startCooldown(abilityId, cooldownTime, abilityName)</code>
+                    <p>Метод - параметри: ID, време, име на способност</p>
+                    <span class="example">Пример: this.startCooldown(1, 3000, "Огнена топка")</span>
                 </div>
             </div>
         </div>
